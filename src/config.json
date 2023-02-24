@@ -1,0 +1,10 @@
+{
+  "COLLECTION INFO": "GOES HERE",
+  "nftContractAddress": "0x77372a4cc66063575b05b44481F059BE356964A4",
+  "nftContractStartBlock": 16612967,
+
+  "DATABASE INFO": "GOES HERE",
+  "tableName": "A_KID_CALLED_BEAST",
+  "createTable": true,
+  "dropTable": false
+}

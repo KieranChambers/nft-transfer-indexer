@@ -1,0 +1,10 @@
+{
+  "COLLECTION INFO": "GOES HERE",
+  "nftContractAddress": "0x306b1ea3ecdf94ab739f1910bbda052ed4a9f949",
+  "nftContractStartBlock": 16610822,
+
+  "DATABASE INFO": "GOES HERE",
+  "tableName": "BEANZ_NFT",
+  "createTable": true,
+  "dropTable": false
+}
