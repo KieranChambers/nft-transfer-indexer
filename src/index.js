@@ -50,6 +50,8 @@ async function nftTransferIndexer() {
   }
 
   async function addEventsToDb(results) {
+    let timestamp = null;
+    let wethPrice = null;
     try {
       const parsedResults = JSON.parse(results);
       const parsedResultsLength = parsedResults.length;
@@ -61,13 +63,15 @@ async function nftTransferIndexer() {
 
       for (let i = 0; i < parsedResultsLength; i++) {
         try {
-          let timestamp = await getBlockTimestamp(parsedResults[i].BLOCKNUMBER);
-          let wethPrice = await getWethHistoricalPrice(parsedResults[i].BLOCKNUMBER);
+          timestamp = await getBlockTimestamp(parsedResults[i].BLOCKNUMBER);
+          wethPrice = await getWethHistoricalPrice(parsedResults[i].BLOCKNUMBER);
 
-          console.log(`Adding in: ${currentEventId}. Events left: ${resultsLeft}`);
+          if (timestamp != null && wethPrice != null) {
+            console.log(i, `timestamp: ${timestamp}, wethPrice: ${wethPrice}`);
+            console.log(`Adding in: ${currentEventId}. Events left: ${resultsLeft}`);
 
-          await db.query(
-            `INSERT INTO ${tableName}(transfer_event_id, block_number, timestamp, sender, receiver, nft_token_id, weth_price, transaction_hash)
+            await db.query(
+              `INSERT INTO ${tableName}(transfer_event_id, block_number, timestamp, sender, receiver, nft_token_id, weth_price, transaction_hash)
             VALUES(${currentEventId},
               ${parsedResults[i].BLOCKNUMBER},
               ${timestamp},
@@ -76,13 +80,15 @@ async function nftTransferIndexer() {
               ${parsedResults[i].NFTID},
               ${wethPrice},
               '${parsedResults[i].TX}')`
-          );
-          currentEventId++;
-          resultsLeft--;
-          await sleep(100); // ! Ethers.js rate limit / Uniswap subgraph rate limit
+            );
+            currentEventId++;
+            resultsLeft--;
+            await sleep(100); // ! Ethers.js rate limit / Uniswap subgraph rate limit
+          } else {
+            console.log("Weth or timestamp returned null. Waiting for timestamp and wethPrice to be fetched.");
+          }
         } catch (error) {
           console.log(error);
-          process.exit();
         }
       }
       console.log("Completed adding new transfer events to DB.");

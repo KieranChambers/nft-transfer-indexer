@@ -53,7 +53,7 @@ async function convertEvent(event) {
 
 async function getWethHistoricalPrice(blockNumber) {
   try {
-    let options = {
+    const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,17 +68,16 @@ async function getWethHistoricalPrice(blockNumber) {
     };
 
     let res = await fetch("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", options);
-    if (res.status != 200) {
-      console.log("Error fetching historical price. Retrying...");
-      await sleep(1000);
-      getWethHistoricalPrice(blockNumber);
-    } else {
-      let resData = await res.json();
-      let wethPrice = await resData.data.pair.token0Price;
+    let resData = await res.json();
+    let wethPrice = await resData.data.pair.token0Price;
+    if (wethPrice != undefined) {
       return wethPrice;
+    } else {
+      getWethHistoricalPrice(blockNumber);
+      console.log("retrying");
     }
   } catch (error) {
-    console.log(error);
+    console.log("catching inside utils", error);
   }
 }
 
