@@ -1,6 +1,6 @@
 # NFT Transfer Indexer
 
-### This script is to demonstrate an understanding of JS, Python, NodeJS, postgres, SQL and the Ethereum blockchain. It's is still a work in progress.
+### This script is to demonstrate an understanding of JS, NodeJS, postgres, SQL and the Ethereum blockchain. It's is still a work in progress.
 
 The intention for this script is that the user can take any collection on the ETH network, filter the event logs and then build their own data around the information saved to the database.
 
