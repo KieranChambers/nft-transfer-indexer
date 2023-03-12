@@ -2,4 +2,5 @@
 node_modules/
 TODO.js
 src/alchemy.js
-setup-scripts/
+setup-scripts/postgresSetupWindows.sh
+src/plot.py
