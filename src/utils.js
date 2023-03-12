@@ -8,7 +8,7 @@ const database = new Client({
   port: 5432,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: "test-db",
+  database: "mydatabase",
 });
 
 async function sleep(milliseconds) {
@@ -52,21 +52,21 @@ async function convertEvent(event) {
 }
 
 async function getWethHistoricalPrice(blockNumber) {
-  try {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `{
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `{
               pair( id: "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc" block: {number: ${blockNumber}}) {
                 token0Price
                }
               }`,
-      }),
-    };
+    }),
+  };
 
+  try {
     let res = await fetch("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", options);
     let resData = await res.json();
     let wethPrice = await resData.data.pair.token0Price;
