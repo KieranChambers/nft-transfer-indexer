@@ -9,13 +9,13 @@ const {
   getWethHistoricalPrice,
 } = require("./utils");
 
-const { dbSetup } = require("../db/dbSetup");
+const { tableSetup } = require("../db/tableSetup");
 const { nftContractAddress, nftContractStartBlock, tableName } = require("./config.json");
 const transferEventAbi = ["event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"];
 
 async function nftTransferIndexer() {
   const db = await dbConnect();
-  await dbSetup(db);
+  await tableSetup(db);
 
   async function getPreviousBlocks() {
     try {
